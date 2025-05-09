@@ -1,180 +1,633 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CampusConnect</title>
-    <link rel="stylesheet" href="navstyle.css">
-    <style>
-        html {
-            scroll-behavior: smooth;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CampusConnect</title>
+  <link rel="stylesheet" href="navstyle.css" />
+  <style>
+    /* Your existing styles here (unchanged) */
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f9f9f9;
+    }
+    header {
+      background: #fff;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 1.5em;
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      gap: 15px;
+    }
+    nav ul li {
+      display: inline;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+    }
+    nav ul li a:hover {
+      text-decoration: underline;
+    }
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .search-bar input[type="text"] {
+      padding: 5px 8px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .search-bar button {
+      padding: 6px 12px;
+      font-size: 1em;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .search-bar button:hover {
+      background-color: #0056b3;
+    }
+    main.container {
+      display: flex;
+      max-width: 1200px;
+      margin: 20px auto;
+      gap: 20px;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+    .left-sidebar, .right-sidebar {
+      flex: 1 1 250px;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+      height: fit-content;
+    }
+    .feed {
+      flex: 2 1 600px;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+    }
+    /* Additional styles for profile card */
+    .profile-card img.profile-pic {
+      width: 100%;
+      border-radius: 50%;
+      max-width: 150px;
+      display: block;
+      margin: 0 auto 10px;
+    }
+    .profile-card h3, .profile-card p {
+      text-align: center;
+      margin: 5px 0;
+    }
+    .profile-links {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .profile-links a {
+      color: #007bff;
+      text-decoration: none;
+      margin: 0 5px;
+    }
+    .profile-links a:hover {
+      text-decoration: underline;
+    }
+    /* Login/Logout link style */
+    #auth-link a {
+      color: #007bff;
+      cursor: pointer;
+    }
+    #auth-link a:hover {
+      text-decoration: underline;
+    }
+
+    /* Modal styles */
+    #edit-profile-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.35);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    #edit-profile-modal .modal-content {
+      background: #fff;
+      padding: 24px 32px;
+      border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+      min-width: 320px;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    #edit-profile-modal label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: #333;
+    }
+    #edit-profile-modal input[type="text"],
+    #edit-profile-modal input[type="email"],
+    #edit-profile-modal input[type="url"],
+    #edit-profile-modal textarea {
+      width: 100%;
+      padding: 8px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+    #edit-profile-modal textarea {
+      min-height: 60px;
+    }
+    #edit-profile-modal .modal-actions {
+      margin-top: 15px;
+      text-align: right;
+    }
+    #edit-profile-modal button {
+      padding: 8px 16px;
+      font-weight: 600;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    #save-profile-btn {
+      background-color: #0B6623;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+    #save-profile-btn:hover {
+      background-color: #12733B;
+    }
+    #cancel-profile-btn {
+      background-color: #ccc;
+      color: #333;
+    }
+    #cancel-profile-btn:hover {
+      background-color: #999;
+    }
+  </style>
 </head>
 <body>
 <header>
-    <div class="logo">CampusConnect</div>
-    <nav>
-        <ul>
-            <li><a href="index.html" class="home-link">Home</a></li>
-            <li><a href="profile.html" class="profile-link">My Profile</a></li>
-            <li><a href="groups.html" class="groups-link">Groups</a></li>
-            <li><a href="events.html" class="events-link">Events</a></li>
-            <li><a href="resources.html" class="resources-link">Resources</a></li>
-            <li><a href="messages.html">Messages</a></li>
-        </ul>
-    </nav>
-    <div class="search-bar">
-        <input type="text" placeholder="Search...">
-        <button>Search</button>
-    </div>
+  <div class="logo">Campus Connect</div>
+  <nav>
+    <ul>
+      <li><a href="index.html" class="home-link">Home</a></li>
+      <li><a href="profile.html" class="profile-link">My Profile</a></li>
+      <li><a href="groups.html" class="groups-link">Groups</a></li>
+      <li><a href="events.html" class="events-link">Events</a></li>
+      <li><a href="messages.html">Messages</a></li>
+      <li id="auth-link"><!-- Login or Logout link injected here --></li>
+    </ul>
+  </nav>
+  <div class="search-bar">
+    <input type="text" placeholder="Search..." />
+    <button>Search</button>
+  </div>
 </header>
 
-    <main class="container">
-        <!-- Left Sidebar -->
-        <section class="left-sidebar" id="profile">
-            <div class="profile-card">
-                <img src="image/sponge.jpg" alt="Profile Picture" class="profile-pic">
-                <h3>Alex Johnson</h3>
-                <p>Computer Science Major</p>
-                <div class="profile-links">
-                    <a href="#">GitHub</a> | <a href="#">LinkedIn</a>
-                </div>
-                <button>Edit Profile</button>
-            </div>
-<div class="shortcuts">
-    <h4>Shortcuts</h4>
-    <ul>
-        <li><a href="my-groups.html">Joined Groups</a></li>
-        <li><a href="my-resources.html">Saved Resources</a></li>
-        <li><a href="my-events.html">My Events</a></li>
-    </ul>
+<main class="container">
+  <section class="left-sidebar" id="profile">
+    <div class="profile-card">
+      <img src="image/sponge.jpg" alt="Profile Picture" class="profile-pic" />
+      <h3 id="profile-name">Alex Johnson</h3>
+      <p id="profile-major">Computer Science Major</p>
+      <div class="profile-links">
+        <a href="#" id="profile-github">GitHub</a> | <a href="#" id="profile-linkedin">LinkedIn</a>
+      </div>
+      <button id="edit-profile-btn">Edit Profile</button>
+    </div>
+    <div class="shortcuts">
+      <h4>Shortcuts</h4>
+      <ul>
+        <li><a href="Navigation Lists/my-groups.html">Joined Groups</a></li>
+        <li><a href="Navigation Lists/my-resources.html">Saved Resources</a></li>
+        <li><a href="Navigation Lists/my-events.html">My Events</a></li>
+      </ul>
+    </div>
+  </section>
+
+<section class="feed" id="home">
+    <div class="post-input-container">
+      <textarea placeholder="Share something with your campus..."></textarea>
+      <div class="post-options">
+        <button class="photo-video-button">Photo/Video</button>
+        <button>Feeling/Activity</button>
+        <button class="post-button">Post</button>
+      </div>
+    </div>
+
+    <!-- Example posts -->
+    <div class="post" data-post-id="1">
+      <div class="post-header">
+        <img src="image/sponge.jpg" alt="User Profile"         class="post-user-pic" />
+        <div class="post-info">
+          <h3 class="my-profile-name">Alex Johnson</h3>
+          <p>Posted 2 hours ago</p>
+        </div>
+      </div>
+      <p class="post-text">Excited to join CampusConnect!</p>
+      <div class="post-action">
+        <button class="like-button" data-post-id="1">Like</button>
+        <button class="comment-button" data-post-id="1">Comment</button>
+        <button>Share</button>
+      </div>
+      <div class="comment-section" id="comments-1"></div>
+      <div class="comment-input-area">
+        <input type="text" placeholder="Write a comment..." data-post-id="1" />
+        <button class="submit-comment-button" data-post-id="1">Post</button>
+      </div>
+    </div>
+
+    <div class="post" data-post-id="2">
+      <div class="post-header">
+        <img src="image/sandy.jpg" alt="User Profile" class="post-user-pic" />
+        <div class="post-info">
+          <h3>Emily Rose</h3>
+          <p>Posted 1 day ago</p>
+        </div>
+      </div>
+      <p class="post-text">Uploaded lecture notes for CS 101 Midterms! Hope it helps everyone. Check Resources section! #StudyTogether</p>
+      <div class="post-action">
+        <button class="like-button" data-post-id="2">Like</button>
+        <button class="comment-button" data-post-id="2">Comment</button>
+        <button>Share</button>
+      </div>
+      <div class="comment-section" id="comments-2"></div>
+      <div class="comment-input-area">
+        <input type="text" placeholder="Write a comment..." data-post-id="2" />
+        <button class="submit-comment-button" data-post-id="2">Post</button>
+      </div>
+    </div>
+
+    <div class="post" data-post-id="3">
+      <div class="post-header">
+        <img src="image/patrick.jpg" alt="User Profile" class="post-user-pic" />
+        <div class="post-info">
+          <h3>Michael Tan</h3>
+          <p>Posted just now</p>
+        </div>
+      </div>
+      <p class="post-text">Anyone interested in forming a study group for Math 202? Let's ace this semester! #StudyGroup</p>
+      <div class="post-action">
+        <button class="like-button" data-post-id="3">Like</button>
+        <button class="comment-button" data-post-id="3">Comment</button>
+        <button>Share</button>
+      </div>
+      <div class="comment-section" id="comments-3"></div>
+      <div class="comment-input-area">
+        <input type="text" placeholder="Write a comment..." data-post-id="3" />
+        <button class="submit-comment-button" data-post-id="3">Post</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="right-sidebar">
+    <div class="suggestions" id="groups">
+      <h4>Groups & Communities</h4>
+      <div class="suggestion-item" data-group-id="cs101">
+        <img src="image/cs 101.jpg.crdownload" alt="Group 1" class="suggestion-pic" />
+        <p><a href="#" class="group-link" data-group-name="CS 101 Study Group">CS 101 Study Group</a></p>
+        <button class="join-btn" data-group="CS 101 Study Group">Join</button>
+      </div>
+      <div class="suggestion-item" data-group-id="photographyclub">
+        <img src="image/photography.jpg" alt="Group 2" class="suggestion-pic" />
+        <p><a href="#" class="group-link" data-group-name="Photography Club">Photography Club</a></p>
+        <button class="join-btn" data-group="Photography Club">Join</button>
+      </div>
+    </div>
+        <div class="trending">
+      <h4>Trending</h4>
+      <ul>
+        <li>#MidtermsPrep</li>
+        <li>#Hackathon2025</li>
+        <li>#CampusEvents</li>
+      </ul>
+    </div>
+    <div class="events" id="events">
+      <h4>Upcoming Events</h4>
+      <ul>
+        <li>Career Fair - May 5, 2025</li>
+        <li>Spring Fest - May 10, 2025</li>
+      </ul>
+    </div>
+    <div class="resources" id="resources">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="#">CS 101 Midterm Notes</a></li>
+        <li><a href="#">Physics Cheat Sheet</a></li>
+      </ul>
+    </div>
+  </section>
+</main>
+  
+  <section class="feed" id="home">
+    <div class="post-input-container">
+      <textarea placeholder="Share something with your campus..."></textarea>
+      <div class="post-options">
+        <button class="photo-video-button">Photo/Video</button>
+        <button>Feeling/Activity</button>
+        <button class="post-button">Post</button>
+      </div>
+    </div>
+
+    <!-- Example posts -->
+    <div class="post" data-post-id="1">
+      <div class="post-header">
+        <img src="image/sponge.jpg" alt="User Profile"         class="post-user-pic" />
+        <div class="post-info">
+          <h3 class="my-profile-name">Alex Johnson</h3>
+          <p>Posted 2 hours ago</p>
+        </div>
+      </div>
+      <p class="post-text">Excited to join CampusConnect!</p>
+      <div class="post-action">
+        <button class="like-button" data-post-id="1">Like</button>
+        <button class="comment-button" data-post-id="1">Comment</button>
+        <button>Share</button>
+      </div>
+      <div class="comment-section" id="comments-1"></div>
+      <div class="comment-input-area">
+        <input type="text" placeholder="Write a comment..." data-post-id="1" />
+        <button class="submit-comment-button" data-post-id="1">Post</button>
+      </div>
+    </div>
+
+    <div class="post" data-post-id="2">
+      <div class="post-header">
+        <img src="image/sandy.jpg" alt="User Profile" class="post-user-pic" />
+        <div class="post-info">
+          <h3>Emily Rose</h3>
+          <p>Posted 1 day ago</p>
+        </div>
+      </div>
+      <p class="post-text">Uploaded lecture notes for CS 101 Midterms! Hope it helps everyone. Check Resources section! #StudyTogether</p>
+      <div class="post-action">
+        <button class="like-button" data-post-id="2">Like</button>
+        <button class="comment-button" data-post-id="2">Comment</button>
+        <button>Share</button>
+      </div>
+      <div class="comment-section" id="comments-2"></div>
+      <div class="comment-input-area">
+        <input type="text" placeholder="Write a comment..." data-post-id="2" />
+        <button class="submit-comment-button" data-post-id="2">Post</button>
+      </div>
+    </div>
+
+    <div class="post" data-post-id="3">
+      <div class="post-header">
+        <img src="image/patrick.jpg" alt="User Profile" class="post-user-pic" />
+        <div class="post-info">
+          <h3>Michael Tan</h3>
+          <p>Posted just now</p>
+        </div>
+      </div>
+      <p class="post-text">Anyone interested in forming a study group for Math 202? Let's ace this semester! #StudyGroup</p>
+      <div class="post-action">
+        <button class="like-button" data-post-id="3">Like</button>
+        <button class="comment-button" data-post-id="3">Comment</button>
+        <button>Share</button>
+      </div>
+      <div class="comment-section" id="comments-3"></div>
+      <div class="comment-input-area">
+        <input type="text" placeholder="Write a comment..." data-post-id="3" />
+        <button class="submit-comment-button" data-post-id="3">Post</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="right-sidebar">
+    <div class="suggestions" id="groups">
+      <h4>Groups & Communities</h4>
+      <div class="suggestion-item" data-group-id="cs101">
+        <img src="image/cs 101.jpg.crdownload" alt="Group 1" class="suggestion-pic" />
+        <p><a href="#" class="group-link" data-group-name="CS 101 Study Group">CS 101 Study Group</a></p>
+        <button class="join-btn" data-group="CS 101 Study Group">Join</button>
+      </div>
+      <div class="suggestion-item" data-group-id="photographyclub">
+        <img src="image/photography.jpg" alt="Group 2" class="suggestion-pic" />
+        <p><a href="#" class="group-link" data-group-name="Photography Club">Photography Club</a></p>
+        <button class="join-btn" data-group="Photography Club">Join</button>
+      </div>
+    </div>
+        <div class="trending">
+      <h4>Trending</h4>
+      <ul>
+        <li>#MidtermsPrep</li>
+        <li>#Hackathon2025</li>
+        <li>#CampusEvents</li>
+      </ul>
+    </div>
+    <div class="events" id="events">
+      <h4>Upcoming Events</h4>
+      <ul>
+        <li>Career Fair - May 5, 2025</li>
+        <li>Spring Fest - May 10, 2025</li>
+      </ul>
+    </div>
+    <div class="resources" id="resources">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="#">CS 101 Midterm Notes</a></li>
+        <li><a href="#">Physics Cheat Sheet</a></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<!-- Edit Profile Modal -->
+<div id="edit-profile-modal">
+  <div class="modal-content">
+    <h2>Edit Profile</h2>
+    <label>
+      Name:<br />
+      <input type="text" id="edit-profile-name" />
+    </label>
+    <label>
+      Major:<br />
+      <input type="text" id="edit-profile-major-input" />
+    </label>
+    <label>
+      GitHub URL:<br />
+      <input type="url" id="edit-profile-github-input" />
+    </label>
+    <label>
+      LinkedIn URL:<br />
+      <input type="url" id="edit-profile-linkedin-input" />
+    </label>
+    <div class="modal-actions">
+      <button id="save-profile-btn">Save</button>
+      <button id="cancel-profile-btn">Cancel</button>
+    </div>
+  </div>
 </div>
-        </section>
 
-        <!-- Feed Section -->
-        <section class="feed" id="home">
-            <div class="post-input-container">
-                <textarea placeholder="Share something with your campus..."></textarea>
-                <div class="post-options">
-                    <button class="photo-video-button">Photo/Video</button>
-                    <button>Feeling/Activity</button>
-                    <button class="post-button">Post</button>
-                </div>
-            </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const loggedIn = localStorage.getItem('campusconnectLoggedIn') === 'true';
+  const authLinkLi = document.getElementById('auth-link');
 
-            <!-- Sample Posts -->
-            <div class="post">
-                <div class="post-header">
-                    <img src="image/club.jpg.crdownload" alt="User Profile" class="post-user-pic">
-                    <div class="post-info">
-                        <h3>Photography Club</h3>
-                        <p>Posted 2 hours ago</p>
-                    </div>
-                </div>
-                <p class="post-text">Join us this Friday for a campus-wide Photo Walk! Meet fellow photographers and share your passion. #Photography #CampusLife</p>
-                <div class="post-actions">
-                    <button>Like</button>
-                    <button class="comment-button">Comment</button>
-                    <button>Share</button>
-                </div>
-                <div class="comment-section"></div>
-                <div class="comment-input-area" style="display: none;">
-                    <input type="text" placeholder="Write a comment...">
-                    <button class="submit-comment-button">Post</button>
-                </div>
-            </div>
+  if (!loggedIn) {
+    window.location.href = 'login.html';
+    return;
+  }
 
-            <div class="post">
-                <div class="post-header">
-                    <img src="image/sandy.jpg" alt="User Profile" class="post-user-pic">
-                    <div class="post-info">
-                        <h3>Emily Rose</h3>
-                        <p>Posted 1 day ago</p>
-                    </div>
-                </div>
-                <p class="post-text">Uploaded lecture notes for CS 101 Midterms! Hope it helps everyone. Check Resources section! #StudyTogether</p>
-                <div class="post-actions">
-                    <button>Like</button>
-                    <button class="comment-button">Comment</button>
-                    <button>Share</button>
-                </div>
-                <div class="comment-section"></div>
-                <div class="comment-input-area" style="display: none;">
-                    <input type="text" placeholder="Write a comment...">
-                    <button class="submit-comment-button">Post</button>
-                </div>
-            </div>
+  // Elements
+  const profileNameEl = document.getElementById('profile-name');
+  const profileMajorEl = document.getElementById('profile-major');
+  const profileGithubEl = document.getElementById('profile-github');
+  const profileLinkedinEl = document.getElementById('profile-linkedin');
 
-            <div class="post">
-                <div class="post-header">
-                    <img src="image/patrick.jpg" alt="User Profile" class="post-user-pic">
-                    <div class="post-info">
-                        <h3>Michael Tan</h3>
-                        <p>Posted just now</p>
-                    </div>
-                </div>
-                <p class="post-text">Anyone interested in forming a study group for Math 202? Let's ace this semester! #StudyGroup</p>
-                <div class="post-actions">
-                    <button>Like</button>
-                    <button class="comment-button">Comment</button>
-                    <button>Share</button>
-                </div>
-                <div class="comment-section"></div>
-                <div class="comment-input-area" style="display: none;">
-                    <input type="text" placeholder="Write a comment...">
-                    <button class="submit-comment-button">Post</button>
-                </div>
-            </div>
-        </section>
+  const editBtn = document.getElementById('edit-profile-btn');
+  const modal = document.getElementById('edit-profile-modal');
+  const saveBtn = document.getElementById('save-profile-btn');
+  const cancelBtn = document.getElementById('cancel-profile-btn');
 
-        <!-- Right Sidebar -->
-        <section class="right-sidebar">
-            <div class="suggestions" id="groups">
-                <h4>Groups & Communities</h4>
-                <div class="suggestion-item">
-                    <img src="image/cs 101.jpg.crdownload" alt="Group 1" class="suggestion-pic">
-                    <p>CS 101 Study Group</p>
-                    <button>Join</button>
-                </div>
-                <div class="suggestion-item">
-                    <img src="image/photography.jpg" alt="Group 2" class="suggestion-pic">
-                    <p>Photography Club</p>
-                    <button>Join</button>
-                </div>
-            </div>
+  const inputName = document.getElementById('edit-profile-name');
+  const inputMajor = document.getElementById('edit-profile-major-input');
+  const inputGithub = document.getElementById('edit-profile-github-input');
+  const inputLinkedin = document.getElementById('edit-profile-linkedin-input');
 
-            <div class="trending">
-                <h4>Trending</h4>
-                <ul>
-                    <li>#MidtermsPrep</li>
-                    <li>#Hackathon2025</li>
-                    <li>#CampusEvents</li>
-                </ul>
-            </div>
+  // Load saved profile info or set defaults
+  function loadProfile() {
+    profileNameEl.textContent = localStorage.getItem('campusconnectUsername') || 'Alex Johnson';
+    profileMajorEl.textContent = localStorage.getItem('campusconnectUserMajor') || 'Computer Science Major';
+    profileGithubEl.href = localStorage.getItem('campusconnectUserGithub') || '#';
+    profileGithubEl.textContent = profileGithubEl.href === '#' ? 'GitHub' : profileGithubEl.href;
+    profileLinkedinEl.href = localStorage.getItem('campusconnectUserLinkedin') || '#';
+    profileLinkedinEl.textContent = profileLinkedinEl.href === '#' ? 'LinkedIn' : profileLinkedinEl.href;
+  }
 
-            <div class="events" id="events">
-                <h4>Upcoming Events</h4>
-                <ul>
-                    <li>Career Fair - May 5, 2025</li>
-                    <li>Spring Fest - May 10, 2025</li>
-                </ul>
-            </div>
+  loadProfile();
 
-            <div class="resources" id="resources">
-                <h4>Resources</h4>
-                <ul>
-                    <li><a href="#">CS 101 Midterm Notes</a></li>
-                    <li><a href="#">Physics Cheat Sheet</a></li>
-                </ul>
-            </div>
-        </section>
-    </main>
+  // Inject Logout link
+  authLinkLi.innerHTML = '<a href="#" id="logout-link">Logout</a>';
+  document.getElementById('logout-link').addEventListener('click', function(e) {
+    e.preventDefault();
+    localStorage.removeItem('campusconnectLoggedIn');
+    localStorage.removeItem('campusconnectUsername');
+    localStorage.removeItem('campusconnectUserMajor');
+    localStorage.removeItem('campusconnectUserGithub');
+    localStorage.removeItem('campusconnectUserLinkedin');
+    window.location.href = 'login.html';
+  });
 
-    <footer>
-        <p>&copy; 2025 CampusConnect - Empowering Student Connections</p>
-    </footer>
+  // Open modal and fill inputs with current profile data
+  editBtn.addEventListener('click', function() {
+    inputName.value = profileNameEl.textContent;
+    inputMajor.value = profileMajorEl.textContent;
+    inputGithub.value = profileGithubEl.href !== '#' ? profileGithubEl.href : '';
+    inputLinkedin.value = profileLinkedinEl.href !== '#' ? profileLinkedinEl.href : '';
+    modal.style.display = 'flex';
+  });
 
-    <script src="script.js"></script>
+  // Save profile changes
+  saveBtn.addEventListener('click', function() {
+    const newName = inputName.value.trim() || 'Alex Johnson';
+    const newMajor = inputMajor.value.trim() || 'Computer Science Major';
+    const newGithub = inputGithub.value.trim() || '#';
+    const newLinkedin = inputLinkedin.value.trim() || '#';
+
+    profileNameEl.textContent = newName;
+    profileMajorEl.textContent = newMajor;
+    profileGithubEl.href = newGithub;
+    profileGithubEl.textContent = newGithub === '#' ? 'GitHub' : newGithub;
+    profileLinkedinEl.href = newLinkedin;
+    profileLinkedinEl.textContent = newLinkedin === '#' ? 'LinkedIn' : newLinkedin;
+
+    // Save to localStorage
+    localStorage.setItem('campusconnectUsername', newName);
+    localStorage.setItem('campusconnectUserMajor', newMajor);
+    localStorage.setItem('campusconnectUserGithub', newGithub);
+    localStorage.setItem('campusconnectUserLinkedin', newLinkedin);
+
+    modal.style.display = 'none';
+
+    // Update all posts authored by the profile owner
+    document.querySelectorAll('.my-profile-name').forEach(el => {
+      el.textContent = newName;
+    });
+  });
+
+  // Cancel editing
+  cancelBtn.addEventListener('click', function() {
+    modal.style.display = 'none';
+  });
+
+  // Close modal when clicking outside content
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) modal.style.display = 'none';
+  });
+});
+// Handle comment button clicks and comment submissions
+const feedSection = document.querySelector('.feed');
+
+feedSection.addEventListener('click', function(event) {
+  const target = event.target;
+
+  // Toggle comment input area visibility
+  if (target.classList.contains('comment-button')) {
+    const post = target.closest('.post');
+    if (!post) return;
+    const commentInputArea = post.querySelector('.comment-input-area');
+    if (!commentInputArea) return;
+    commentInputArea.style.display = commentInputArea.style.display === 'block' ? 'none' : 'block';
+  }
+
+  // Submit comment
+  if (target.classList.contains('submit-comment-button')) {
+    const post = target.closest('.post');
+    if (!post) return;
+    const commentInput = post.querySelector('.comment-input-area input[type="text"]');
+    const commentSection = post.querySelector('.comment-section');
+    if (!commentInput || !commentSection) return;
+
+    const commentText = commentInput.value.trim();
+    if (commentText.length === 0) return;
+
+    // Create new comment element
+    const newComment = document.createElement('p');
+    newComment.textContent = `You: ${commentText}`;
+    commentSection.appendChild(newComment);
+
+    // Clear input and optionally hide input area
+    commentInput.value = '';
+    // commentInputArea.style.display = 'none'; // Optional: hide after posting
+  }
+});
+
+</script>
 </body>
 </html>

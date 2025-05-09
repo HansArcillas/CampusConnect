@@ -1,68 +1,502 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>My Profile - CampusConnect</title>
-    <link rel="stylesheet" href="navstyle.css">
+  <meta charset="UTF-8" />
+  <title>My Profile - CampusConnect</title>
+  <link rel="stylesheet" href="navstyle.css" />
+  <style>
+    /* Container */
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      background: #f0f2f5;
+      color: #1c1e21;
+    }
+    header {
+      background: #fff;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #0B6623;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #444;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    nav ul li a:hover {
+      color: #12733B;
+    }
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .search-bar input[type="text"] {
+      padding: 10px;
+      border: 1px solid #0B6623;
+      border-radius: 20px 0 0 20px;
+      outline: none;
+    }
+    .search-bar button {
+      background-color: #0B6623;
+      color: #fff;
+      border: 1px solid #0B6623;
+      border-radius: 0 20px 20px 0;
+      padding: 10px 15px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .search-bar button:hover {
+      background-color: #12733B;
+    }
+
+    /* Profile container */
+    .profile-container {
+      max-width: 1000px;
+      margin: 20px auto 60px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Cover photo */
+    .cover-photo {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      position: relative;
+    }
+
+    /* Profile picture */
+    .profile-pic-large {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 5px solid white;
+      position: absolute;
+      bottom: -80px;
+      left: 40px;
+      object-fit: cover;
+      background: white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    /* Profile header */
+    .profile-header {
+      position: relative;
+      padding: 100px 40px 40px 220px;
+      min-height: 160px;
+    }
+    .profile-header h1 {
+      margin: 0 0 10px;
+      font-size: 2.5rem;
+      color: #0B6623;
+    }
+    .profile-header p {
+      margin: 0;
+      font-size: 1.2rem;
+      color: #555;
+    }
+
+    /* Profile details */
+    .profile-details {
+      padding: 20px 40px;
+      border-top: 1px solid #eee;
+      font-size: 1rem;
+      color: #333;
+      max-width: 700px;
+      margin: 0 auto 40px;
+    }
+    .profile-details p {
+      margin: 10px 0;
+    }
+    .profile-details strong {
+      font-weight: 600;
+      color: #0B6623;
+    }
+    .profile-links {
+      margin-top: 15px;
+      text-align: center;
+    }
+    .profile-links a {
+      color: #4d95f5;
+      text-decoration: none;
+      margin: 0 8px;
+      font-weight: 600;
+    }
+    .profile-links a:hover {
+      text-decoration: underline;
+    }
+    .edit-profile-btn {
+      display: block;
+      margin: 20px auto 40px;
+      background-color: #0B6623;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .edit-profile-btn:hover {
+      background-color: #12733B;
+    }
+
+    /* Recent activity */
+    .profile-activity {
+      max-width: 700px;
+      margin: 0 auto 40px;
+      padding: 0 40px 40px;
+    }
+    .profile-activity h2 {
+      color: #0B6623;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      border-bottom: 2px solid #0B6623;
+      padding-bottom: 8px;
+    }
+    .post {
+      background: #f7f7f7;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .post-text {
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+    .post-info {
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .profile-header {
+        padding: 140px 20px 20px 20px;
+      }
+      .profile-pic-large {
+        position: static;
+        margin: -120px auto 20px;
+        display: block;
+      }
+      .profile-container {
+        margin: 10px;
+      }
+      .profile-details, .profile-activity {
+        padding: 0 20px;
+        max-width: 100%;
+      }
+    }
+
+    /* Modal styles */
+    #edit-profile-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.35);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    #edit-profile-modal .modal-content {
+      background: #fff;
+      padding: 24px 32px;
+      border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+      min-width: 320px;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    #edit-profile-modal label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: #333;
+    }
+    #edit-profile-modal input[type="text"],
+    #edit-profile-modal input[type="email"],
+    #edit-profile-modal input[type="url"],
+    #edit-profile-modal textarea {
+      width: 100%;
+      padding: 8px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+    #edit-profile-modal textarea {
+      min-height: 60px;
+    }
+    #edit-profile-modal .modal-actions {
+      margin-top: 15px;
+      text-align: right;
+    }
+    #edit-profile-modal button {
+      padding: 8px 16px;
+      font-weight: 600;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    #save-profile-btn {
+      background-color: #0B6623;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+    #save-profile-btn:hover {
+      background-color: #12733B;
+    }
+    #cancel-profile-btn {
+      background-color: #ccc;
+      color: #333;
+    }
+    #cancel-profile-btn:hover {
+      background-color: #999;
+    }
+  </style>
 </head>
 <body>
-    <header>
-    <div class="logo">Campus Connect</div>
-    <nav>
-        <ul>
-            <li><a href="index.html" class="home-link">Home</a></li>
-            <li><a href="profile.html" class="profile-link">My Profile</a></li>
-            <li><a href="groups.html" class="groups-link">Groups</a></li>
-            <li><a href="events.html" class="events-link">Events</a></li>
-            <li><a href="resources.html" class="resources-link">Resources</a></li>
-        </ul>
-    </nav>
-    <div class="search-bar">
-        <input type="text" placeholder="Search...">
-        <button>Search</button>
-    </div>
+<header>
+  <div class="logo">Campus Connect</div>
+  <nav>
+    <ul>
+      <li><a href="index.html" class="home-link">Home</a></li>
+      <li><a href="profile.html" class="profile-link">My Profile</a></li>
+      <li><a href="groups.html" class="groups-link">Groups</a></li>
+      <li><a href="events.html" class="events-link">Events</a></li>
+      <li><a href="resources.html" class="resources-link">Resources</a></li>
+      <li><a href="messages.html">Messages</a></li>
+    </ul>
+  </nav>
+  <div class="search-bar">
+    <input type="text" placeholder="Search..." />
+    <button>Search</button>
+  </div>
 </header>
 
-    <main class="container">
-        <section class="feed" style="width: 100%;">
-            <div class="profile-card" style="max-width: 700px; margin: auto;">
-                <div class="profile-header">
-                    <img src="image/club.jpg.crdownload" alt="Cover Photo" class="cover-photo">
-                    <img src="image/sponge.jpg" alt="Profile Picture" class="profile-pic large">
-                    <div class="profile-info-header">
-                        <h3>Alex Johnson</h3>
-                        <p>Computer Science Major, Batch 2025</p>
-                    </div>
-                </div>
-                <div class="profile-details">
-                    <p><strong>Bio:</strong> Passionate about coding, coffee, and campus life.</p>
-                    <p><strong>Email:</strong> alex.johnson@campus.edu</p>
-                    <p><strong>Interests:</strong> Web Development, AI, Photography, Hiking</p>
-                    <p><strong>Clubs:</strong> ACM, Photography Club</p>
-                    <p><strong>Courses:</strong> CS 101, CS 202, Math 202</p>
-                    <div class="profile-links">
-                        <a href="#">GitHub</a> | <a href="#">LinkedIn</a>
-                    </div>
-                    <button>Edit Profile</button>
-                </div>
+<main>
+  <div class="profile-container">
+    <div style="position: relative;">
+      <img src="image/club.jpg.crdownload" alt="Cover Photo" class="cover-photo" />
+      <img src="image/sponge.jpg" alt="Profile Picture" class="profile-pic-large" />
+    </div>
+    <section class="profile-header">
+      <h1 id="profile-name">Alex Johnson</h1>
+      <p id="profile-major">Computer Science Major, Batch 2025</p>
+    </section>
 
-                <div class="profile-activity">
-                    <h2>Recent Activity</h2>
-                    <div class="post">
-                        <p class="post-text">Just joined the Math Circle group! Looking forward to some challenging problems. #Math</p>
-                        <p class="post-info">Posted 2 days ago</p>
-                    </div>
-                    <div class="post">
-                        <p class="post-text">Shared some helpful notes in the CS 101 resources section.</p>
-                        <p class="post-info">Posted 1 week ago</p>
-                    </div>
-                    </div>
-            </div>
-        </section>
-    </main>
+    <section class="profile-details">
+      <p><strong>Bio:</strong> <span id="profile-bio">Passionate about coding, coffee, and campus life.</span></p>
+      <p><strong>Email:</strong> <span id="profile-email">alex.johnson@campus.edu</span></p>
+      <p><strong>Interests:</strong> <span id="profile-interests">Web Development, AI, Photography, Hiking</span></p>
+      <p><strong>Clubs:</strong> <span id="profile-clubs">ACM, Photography Club</span></p>
+      <p><strong>Courses:</strong> <span id="profile-courses">CS 101, CS 202, Math 202</span></p>
+      <div class="profile-links">
+        <a href="#" id="profile-github" target="_blank">GitHub</a> | 
+        <a href="#" id="profile-linkedin" target="_blank">LinkedIn</a>
+      </div>
+      <button class="edit-profile-btn" id="edit-profile-btn">Edit Profile</button>
+    </section>
 
-    <footer>
-        <p>&copy; 2025 CampusConnect - Empowering Student Connections</p>
-    </footer>
+    <section class="profile-activity">
+      <h2>Recent Activity</h2>
+      <div class="post">
+        <p class="post-text">Just joined the Math Circle group! Looking forward to some challenging problems. #Math</p>
+        <p class="post-info">Posted 2 days ago</p>
+      </div>
+      <div class="post">
+        <p class="post-text">Shared some helpful notes in the CS 101 resources section.</p>
+        <p class="post-info">Posted 1 week ago</p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- Edit Profile Modal -->
+<div id="edit-profile-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.35); z-index:1000; align-items:center; justify-content:center;">
+  <div class="modal-content" style="background:#fff; padding:24px 32px; border-radius:8px; box-shadow:0 4px 24px rgba(0,0,0,0.15); min-width:320px; max-width:90vw; max-height:90vh; overflow-y:auto; position:relative;">
+    <h2>Edit Profile</h2>
+    <label>
+      Name:<br />
+      <input type="text" id="edit-profile-name" />
+    </label>
+    <label>
+      Major:<br />
+      <input type="text" id="edit-profile-major-input" />
+    </label>
+    <label>
+      Bio:<br />
+      <textarea id="edit-profile-bio"></textarea>
+    </label>
+    <label>
+      Email:<br />
+      <input type="email" id="edit-profile-email" />
+    </label>
+    <label>
+      Interests (comma separated):<br />
+      <input type="text" id="edit-profile-interests" />
+    </label>
+    <label>
+      Clubs (comma separated):<br />
+      <input type="text" id="edit-profile-clubs" />
+    </label>
+    <label>
+      Courses (comma separated):<br />
+      <input type="text" id="edit-profile-courses" />
+    </label>
+    <label>
+      GitHub URL:<br />
+      <input type="url" id="edit-profile-github" />
+    </label>
+    <label>
+      LinkedIn URL:<br />
+      <input type="url" id="edit-profile-linkedin" />
+    </label>
+    <div class="modal-actions" style="margin-top:12px; text-align:right;">
+      <button id="save-profile-btn" style="margin-right:10px;">Save</button>
+      <button id="cancel-profile-btn">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2025 CampusConnect - Empowering Student Connections</p>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const editBtn = document.getElementById('edit-profile-btn');
+  const modal = document.getElementById('edit-profile-modal');
+  const saveBtn = document.getElementById('save-profile-btn');
+  const cancelBtn = document.getElementById('cancel-profile-btn');
+
+  // Profile display elements
+  const profileName = document.getElementById('profile-name');
+  const profileMajor = document.getElementById('profile-major');
+  const profileBio = document.getElementById('profile-bio');
+  const profileEmail = document.getElementById('profile-email');
+  const profileInterests = document.getElementById('profile-interests');
+  const profileClubs = document.getElementById('profile-clubs');
+  const profileCourses = document.getElementById('profile-courses');
+  const profileGithub = document.getElementById('profile-github');
+  const profileLinkedin = document.getElementById('profile-linkedin');
+
+  // Modal input elements
+  const inputName = document.getElementById('edit-profile-name');
+  const inputMajor = document.getElementById('edit-profile-major-input');
+  const inputBio = document.getElementById('edit-profile-bio');
+  const inputEmail = document.getElementById('edit-profile-email');
+  const inputInterests = document.getElementById('edit-profile-interests');
+  const inputClubs = document.getElementById('edit-profile-clubs');
+  const inputCourses = document.getElementById('edit-profile-courses');
+  const inputGithub = document.getElementById('edit-profile-github');
+  const inputLinkedin = document.getElementById('edit-profile-linkedin');
+
+  // Load profile data from localStorage or use defaults
+  function loadProfile() {
+    profileName.textContent = localStorage.getItem('campusconnectUsername') || 'Alex Johnson';
+    profileMajor.textContent = localStorage.getItem('campusconnectUserMajor') || 'Computer Science Major, Batch 2025';
+    profileBio.textContent = localStorage.getItem('campusconnectUserBio') || 'Passionate about coding, coffee, and campus life.';
+    profileEmail.textContent = localStorage.getItem('campusconnectUserEmail') || 'alex.johnson@campus.edu';
+    profileInterests.textContent = localStorage.getItem('campusconnectUserInterests') || 'Web Development, AI, Photography, Hiking';
+    profileClubs.textContent = localStorage.getItem('campusconnectUserClubs') || 'ACM, Photography Club';
+    profileCourses.textContent = localStorage.getItem('campusconnectUserCourses') || 'CS 101, CS 202, Math 202';
+
+    const githubUrl = localStorage.getItem('campusconnectUserGithub') || '#';
+    profileGithub.href = githubUrl;
+    profileGithub.textContent = githubUrl === '#' ? 'GitHub' : githubUrl;
+
+    const linkedinUrl = localStorage.getItem('campusconnectUserLinkedin') || '#';
+    profileLinkedin.href = linkedinUrl;
+    profileLinkedin.textContent = linkedinUrl === '#' ? 'LinkedIn' : linkedinUrl;
+  }
+
+  loadProfile();
+
+  // Open modal and populate inputs with current profile data
+  editBtn.addEventListener('click', function() {
+    inputName.value = profileName.textContent;
+    inputMajor.value = profileMajor.textContent;
+    inputBio.value = profileBio.textContent;
+    inputEmail.value = profileEmail.textContent;
+    inputInterests.value = profileInterests.textContent;
+    inputClubs.value = profileClubs.textContent;
+    inputCourses.value = profileCourses.textContent;
+    inputGithub.value = profileGithub.href !== '#' ? profileGithub.href : '';
+    inputLinkedin.value = profileLinkedin.href !== '#' ? profileLinkedin.href : '';
+
+    modal.style.display = 'flex';
+  });
+
+  // Save changes and update profile display + localStorage
+  saveBtn.addEventListener('click', function() {
+    profileName.textContent = inputName.value.trim() || 'Alex Johnson';
+    profileMajor.textContent = inputMajor.value.trim() || 'Computer Science Major, Batch 2025';
+    profileBio.textContent = inputBio.value.trim() || 'Passionate about coding, coffee, and campus life.';
+    profileEmail.textContent = inputEmail.value.trim() || 'alex.johnson@campus.edu';
+    profileInterests.textContent = inputInterests.value.trim() || 'Web Development, AI, Photography, Hiking';
+    profileClubs.textContent = inputClubs.value.trim() || 'ACM, Photography Club';
+    profileCourses.textContent = inputCourses.value.trim() || 'CS 101, CS 202, Math 202';
+
+    profileGithub.href = inputGithub.value.trim() || '#';
+    profileGithub.textContent = inputGithub.value.trim() || 'GitHub';
+
+    profileLinkedin.href = inputLinkedin.value.trim() || '#';
+    profileLinkedin.textContent = inputLinkedin.value.trim() || 'LinkedIn';
+
+    // Save all fields to localStorage
+    localStorage.setItem('campusconnectUsername', profileName.textContent);
+    localStorage.setItem('campusconnectUserMajor', profileMajor.textContent);
+    localStorage.setItem('campusconnectUserBio', profileBio.textContent);
+    localStorage.setItem('campusconnectUserEmail', profileEmail.textContent);
+    localStorage.setItem('campusconnectUserInterests', profileInterests.textContent);
+    localStorage.setItem('campusconnectUserClubs', profileClubs.textContent);
+    localStorage.setItem('campusconnectUserCourses', profileCourses.textContent);
+    localStorage.setItem('campusconnectUserGithub', profileGithub.href);
+    localStorage.setItem('campusconnectUserLinkedin', profileLinkedin.href);
+
+    modal.style.display = 'none';
+  });
+
+  // Cancel editing and close modal
+  cancelBtn.addEventListener('click', function() {
+    modal.style.display = 'none';
+  });
+
+  // Close modal when clicking outside modal content
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) modal.style.display = 'none';
+  });
+});
+</script>
 </body>
 </html>
+

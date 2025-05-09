@@ -1,6 +1,7 @@
 /* General Styles */
 body {
     font-family: sans-serif;
+    padding-top: 30px;
     margin: 0;
     padding: 0;
     background-color: #f0f2f5;
@@ -102,6 +103,9 @@ nav ul li a:hover {
     margin-bottom: 20px;
     text-align: center;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    max-width: 700px;   
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .profile-pic {
@@ -575,7 +579,7 @@ nav ul li a:hover {
     gap: 15px;
 }
 
-.post-actions button {
+.post-action button {
     background: none;
     border: none;
     color: #65676b;
@@ -584,12 +588,10 @@ nav ul li a:hover {
     font-weight: 500;
     transition: color 0.3s ease;
 }
-
-
-.post-actions button:hover {
-    background-color: white;
-    color: white;
+.post-action button:active {
+    color: #0B6623;
 }
+
 /* Styles for the Events Page */
 
 .groups-filter,
