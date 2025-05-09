@@ -575,7 +575,7 @@ nav ul li a:hover {
     gap: 15px;
 }
 
-.post-actions button {
+.post-action button {
     background: none;
     border: none;
     color: #65676b;
@@ -584,12 +584,10 @@ nav ul li a:hover {
     font-weight: 500;
     transition: color 0.3s ease;
 }
-
-
-.post-actions button:hover {
-    background-color: white;
-    color: white;
+.post-action button:active {
+    color: #0B6623;
 }
+
 /* Styles for the Events Page */
 
 .groups-filter,

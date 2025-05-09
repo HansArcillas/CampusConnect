@@ -1,35 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Login - CampusConnect</title>
-    <link rel="stylesheet" href="userloginstyle.css">
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f0f2f5;
-        }
+  <meta charset="UTF-8" />
+  <title>Login - CampusConnect</title>
+  <link rel="stylesheet" href="userloginstyle.css" />
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #f0f2f5;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    .login-container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+      width: 320px;
+      box-sizing: border-box;
+    }
+    h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      font-size: 1em;
+    }
+    .login-button {
+      width: 100%;
+      padding: 10px;
+      background-color: #0B6623;
+      border: none;
+      color: white;
+      font-size: 1em;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .login-button:hover {
+      background-color: #12733B;
+    }
+    .signup-link {
+      margin-top: 15px;
+      font-size: 0.9em;
+      text-align: center;
+    }
+    .signup-link a {
+      color: #0B6623;
+      text-decoration: none;
+    }
+    .signup-link a:hover {
+      text-decoration: underline;
+    }
   </style>
-
 </head>
 <body>
-    <div class="login-container">
-        <h2>Login to CampusConnect</h2>
-        <form action="#" method="post"> <div class="form-group">
-                <label for="username">Username or Email</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            
-        </form>
-        <button type="submit" class="login-button">Login</button>
-        <p class="signup-link">Don't have an account? <a href="signup.html">Sign up</a></p>
- </div>
+  <div class="login-container">
+    <h2>Login to CampusConnect</h2>
+    <form id="login-form" action="#" method="post">
+      <div class="form-group">
+        <label for="username">Username or Email</label>
+        <input type="text" id="username" name="username" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required />
+      </div>
+      <button type="submit" class="login-button">Login</button>
+    </form>
+    <p class="signup-link">Don't have an account? <a href="signup.html">Sign up</a></p>
+  </div>
+
+  <script>
+    // Redirect to index.html if already logged in
+    if (localStorage.getItem('campusconnectLoggedIn') === 'true') {
+      window.location.href = 'index.html';
+    }
+
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (username && password) {
+        // Save login status and username
+        localStorage.setItem('campusconnectLoggedIn', 'true');
+        localStorage.setItem('campusconnectUsername', username);
+
+        // Redirect to main page
+        window.location.href = 'index.html';
+      } else {
+        alert('Please enter username and password.');
+      }
+    });
+  </script>
 </body>
 </html>
