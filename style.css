@@ -577,7 +577,7 @@ nav ul li a:hover {
     gap: 15px;
 }
 
-.post-actions button {
+.post-action button {
     background: none;
     border: none;
     color: #65676b;
@@ -586,7 +586,9 @@ nav ul li a:hover {
     font-weight: 500;
     transition: color 0.3s ease;
 }
-
+.post-action button:active{
+    color: #0B6623;
+}
 
 .post-actions button.approve-btn:hover {
     background-color: #12733B;
